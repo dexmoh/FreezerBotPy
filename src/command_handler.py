@@ -1,6 +1,8 @@
+import discord
 import bot
 import whitelist
 import console
+import datetime
 import time
 
 
@@ -36,9 +38,17 @@ async def _shutdown(ctx):
 async def _toggle_experimental(ctx):
     if ctx.author.id in whitelist.user_whitelist:
         bot.experimental = not bot.experimental
+        
+        embed = discord.Embed(
+            color=bot.color
+        )
+        
         if bot.experimental:
             console.log(f'User {ctx.author.name} (ID: {ctx.author.id}) enabled experimental features.')
-            await ctx.send('Experimental features are now enabled.')
+            embed.description = 'Experimental features are now **enabled**.'
         else:
             console.log(f'User {ctx.author.name} (ID: {ctx.author.id}) disabled experimental features.')
-            await ctx.send('Experimental features are now disabled.')
+            embed.description = 'Experimental features are now **disabled**.'
+
+        embed.set_footer(text=f'Requested by {ctx.author.name}.', icon_url=ctx.author.avatar.url)
+        await ctx.send(embed=embed)

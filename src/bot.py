@@ -6,6 +6,9 @@ import console
 # Our bot's prefix (case sensitive).
 prefix = 'poss '
 
+# The color we'll use in embeds.
+color = 0x1ABC9C
+
 # Setup intents.
 intents = discord.Intents.default()
 intents.message_content = True
