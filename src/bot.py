@@ -17,7 +17,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix=prefix, intents=intents)
 
 # Flag we'll use to check whether the bot should use experimental features.
-experimental = False
+experimental = True
 
 
 # This method runs when the bot connects for the first time.
