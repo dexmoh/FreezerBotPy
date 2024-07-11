@@ -6,8 +6,9 @@ import console
 # Our bot's prefix (case sensitive).
 prefix = 'poss '
 
-# The color we'll use in embeds.
+# The color and the name we'll use in bot's embeds.
 color = 0x1ABC9C
+name = 'Chilly'
 
 # Setup intents.
 intents = discord.Intents.default()
