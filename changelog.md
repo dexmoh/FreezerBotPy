@@ -3,10 +3,11 @@
 
 ## General
 - The bot is now completely rewritten in Python.
-- Improved readability of menus.
+- Improved readability of user menus.
 - The bot invites are no longer public, but the bot won't leave the servers it's already been part of. You can ask `dexmoh` on discord for an invite link.
 - Commands are now case sensitive.
 - All of the tokens and API keys are now saved as environment variables.
+- Bot will no longer say hi back when you say `poss hi`, how impolite...
 
 ## Pins
 The pin feature seems to be the most used feature of the bot so it went through some improvements.

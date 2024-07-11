@@ -1,7 +1,9 @@
 import os
 import bot
+import command_handler as ch
 import whitelist
 import console
+
 
 # Entry point.
 def main():
@@ -10,7 +12,7 @@ def main():
 
     # Fetch env variables.
     if 'FREEZER_BOT_DISCORD_TOKEN' not in os.environ:
-        console.log('Couldn\'t find the Discord token, make sure the "FREEZER_BOT_DISCORD_TOKEN" environment variable is set.', console.Level.CRITICAL)
+        console.log('Couldn\'t find bot\'s Discord token, make sure the "FREEZER_BOT_DISCORD_TOKEN" environment variable is set.', console.Level.CRITICAL)
         return
     
     discord_token_env = os.environ.get('FREEZER_BOT_DISCORD_TOKEN', '')
@@ -21,7 +23,7 @@ def main():
     
     # Initialize user and server whitelists.
     whitelist.init()
-
+    
     # Run the bot.
     bot.bot.run(discord_token_env)
     del discord_token_env

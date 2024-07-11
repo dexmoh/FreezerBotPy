@@ -1,9 +1,10 @@
 import console
 
+
 # List of discord users that have access to the bot's privileged commands.
 user_whitelist = []
 
-# List of discord servers that have access to the new experimental features.
+# List of discord servers that have access to the experimental features.
 server_whitelist = []
 
 
