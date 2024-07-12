@@ -1,8 +1,8 @@
 import os
-import bot
-import command_handler as ch
-import whitelist
 import console
+import discord
+import whitelist
+import freezer_bot
 
 
 # Entry point.
@@ -23,10 +23,19 @@ def main():
     
     # Initialize user and server whitelists.
     whitelist.init()
-    
-    # Run the bot.
-    bot.bot.run(discord_token_env)
-    del discord_token_env
+
+    # Setup and run the bot.
+    intents = discord.Intents.default()
+    intents.message_content = True
+
+    bot = freezer_bot.FreezerBot(
+        prefix="poss ",
+        name="Chilly",
+        color=0x1ABC9C,
+        intents=intents
+    )
+
+    bot.run(token=discord_token_env) # (blocking call)
 
 
 if __name__ == '__main__':

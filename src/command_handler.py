@@ -1,18 +1,25 @@
 import discord
-import bot
+from discord.ext import commands
 import whitelist
 import console
-import datetime
 import time
+
+
+# All of the command methods must be registered before the bot can use them.
+def register_commands(bot: commands.Bot):
+    bot.add_command(_fact)
+    bot.add_command(_bitch)
+    bot.add_command(_shutdown)
+    bot.add_command(_toggle_experimental)
 
 
 # *** COMMANDS ***
 
 # [EXPERIMENTAL] Generate a silly opossum fact.
-@bot.bot.command(name='fact', aliases=['facts'])
+@commands.command(name='fact', aliases=['facts'])
 async def _fact(ctx):
     embed = discord.Embed(
-        color=bot.color
+        color=ctx.bot.color
     )
 
     embed.set_footer(text=f'Requested by {ctx.author.name}.', icon_url=ctx.author.avatar.url)
@@ -22,7 +29,7 @@ async def _fact(ctx):
         await ctx.send(embed=embed)
         return
 
-    if not bot.experimental:
+    if not ctx.bot.experimental:
         embed.description = 'Experimental features are currently disabled.'
         await ctx.send(embed=embed)
         return
@@ -35,7 +42,7 @@ async def _fact(ctx):
 
 # Chilly's version of the classic 'ping' command. :)
 # For comedic effect, this command isn't documented anywhere.
-@bot.bot.command(name='bitch')
+@commands.command(name='bitch')
 async def _bitch(ctx):
     await ctx.send('https://media.discordapp.net/attachments/622200209015046220/831832692835221554/bitch.gif')
 
@@ -43,7 +50,7 @@ async def _bitch(ctx):
 # *** PRIVILEGED COMMANDS ***
 
 # Shut down the bot (you'll have to manually turn it back on).
-@bot.bot.command(name='shutdown')
+@commands.command(name='shutdown')
 async def _shutdown(ctx):
     async with ctx.channel.typing():
         time.sleep(0.8)
@@ -59,18 +66,18 @@ async def _shutdown(ctx):
 
 
 # Toggle experimental features off and on.
-@bot.bot.command(name='toggle_exp')
+@commands.command(name='toggle_exp')
 async def _toggle_experimental(ctx):
     if ctx.author.id in whitelist.user_whitelist:
-        bot.experimental = not bot.experimental
+        ctx.bot.experimental = not ctx.bot.experimental
 
         embed = discord.Embed(
-            color=bot.color
+            color=ctx.bot.color
         )
 
         embed.set_footer(text=f'Requested by {ctx.author.name}.', icon_url=ctx.author.avatar.url)
 
-        if bot.experimental:
+        if ctx.bot.experimental:
             console.log(f'User {ctx.author.name} (ID: {ctx.author.id}) enabled experimental features.')
             embed.description = 'Experimental features are now **enabled**.'
         else:
