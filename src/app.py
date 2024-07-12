@@ -1,7 +1,6 @@
 import os
 import console
 import discord
-import whitelist
 import freezer_bot
 
 
@@ -21,9 +20,6 @@ def main():
     if openai_api_key_env == '':
         console.log("'FREEZER_BOT_OPENAI_API_KEY' isn't set in environment variables, the bot will only use legacy text generation.", console.Level.WARNING)
     
-    # Initialize user and server whitelists.
-    whitelist.init()
-
     # Setup and run the bot.
     intents = discord.Intents.default()
     intents.message_content = True
@@ -32,7 +28,9 @@ def main():
         prefix="poss ",
         name="Chilly",
         color=0x1ABC9C,
-        intents=intents
+        intents=intents,
+        user_whitelist_path=".data/user_whitelist.txt",
+        server_whitelist_path=".data/server_whitelist.txt"
     )
 
     bot.run(token=discord_token_env) # (blocking call)
