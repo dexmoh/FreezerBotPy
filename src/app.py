@@ -11,15 +11,15 @@ def main():
     console.init()
 
     # Fetch env variables.
-    if 'FREEZER_BOT_DISCORD_TOKEN' not in os.environ:
-        console.log('Couldn\'t find bot\'s Discord token, make sure the "FREEZER_BOT_DISCORD_TOKEN" environment variable is set.', console.Level.CRITICAL)
+    if "FREEZER_BOT_DISCORD_TOKEN" not in os.environ:
+        console.log("Couldn't find bot's Discord token, make sure the 'FREEZER_BOT_DISCORD_TOKEN' environment variable is set.", console.Level.CRITICAL)
         return
     
-    discord_token_env = os.environ.get('FREEZER_BOT_DISCORD_TOKEN', '')
-    openai_api_key_env = os.environ.get('FREEZER_BOT_OPENAI_API_KEY', '')
+    discord_token_env = os.environ.get("FREEZER_BOT_DISCORD_TOKEN", "")
+    openai_api_key_env = os.environ.get("FREEZER_BOT_OPENAI_API_KEY", "")
 
     if openai_api_key_env == '':
-        console.log('"FREEZER_BOT_OPENAI_API_KEY" isn\'t set in environment variables, the bot will only use legacy text generation.', console.Level.WARNING)
+        console.log("'FREEZER_BOT_OPENAI_API_KEY' isn't set in environment variables, the bot will only use legacy text generation.", console.Level.WARNING)
     
     # Initialize user and server whitelists.
     whitelist.init()
@@ -38,5 +38,5 @@ def main():
     bot.run(token=discord_token_env) # (blocking call)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

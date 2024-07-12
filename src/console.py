@@ -1,4 +1,5 @@
 # Module that implements basic console logging.
+# TODO: Log errors and warnings to a file.
 
 import logging
 from enum import Enum
@@ -15,7 +16,7 @@ class Level(Enum):
 def init():
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s %(levelname)s     %(message)s',
+        format="%(asctime)s %(levelname)s     %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
 

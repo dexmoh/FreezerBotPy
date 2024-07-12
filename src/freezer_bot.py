@@ -19,10 +19,10 @@ class FreezerBot(commands.Bot):
     
     # This method runs when the bot connects for the first time.
     async def on_ready(self):
-        console.log(f'Logged in as {self.user} (ID: {self.user.id}).')
+        console.log(f"Logged in as {self.user} (ID: {self.user.id}).")
         await self.change_presence(
             activity=discord.Activity(
                 type=discord.ActivityType.listening,
-                name='WAAAAAHH'
+                name="WAAAAAHH"
             )
         )
