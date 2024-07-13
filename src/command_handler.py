@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import console
-import time
+from embed import create_embed
 
 
 # All of the command methods must be registered before the bot can use them.
@@ -17,25 +17,22 @@ def register_commands(bot: commands.Bot):
 # [EXPERIMENTAL] Generate a silly opossum fact.
 @commands.command(name="fact", aliases=["facts"])
 async def _fact(ctx):
-    embed = discord.Embed(
-        color=ctx.bot.color
-    )
-
-    embed.set_footer(text=f'Requested by {ctx.author.name}.', icon_url=ctx.author.avatar.url)
-
     if ctx.message.guild.id not in ctx.bot.server_whitelist:
-        embed.description = "This discord server doesn't have access to experimental features."
+        embed = create_embed(ctx, desc="This discord server doesn't have access to experimental features.")
         await ctx.send(embed=embed)
         return
 
     if not ctx.bot.experimental:
-        embed.description = "Experimental features are currently disabled."
+        embed = create_embed(ctx, desc="Experimental features are currently disabled.")
         await ctx.send(embed=embed)
         return
 
-    embed.title = "COOL OPOSSUM FACT!"
-    embed.set_thumbnail(url="https://imgur.com/dRLQcoP.png")
-    embed.description = "This is a placeholder, you shouldn't be seeing this. If you're seeing this please don't. Thank you!"
+    embed = create_embed(
+        ctx,
+        title="COOL OPOSSUM FACT!",
+        desc="This is a placeholder, you shouldn't be seeing this. If you're seeing this please don't. Thank you!",
+        thumbnail_url="https://imgur.com/dRLQcoP.png"
+    )
     await ctx.send(embed=embed)
 
 
@@ -51,35 +48,31 @@ async def _bitch(ctx):
 # Shut down the bot (you'll have to manually turn it back on).
 @commands.command(name="shutdown")
 async def _shutdown(ctx):
-    embed = discord.Embed(
-        color=ctx.bot.color
-    )
-
-    embed.set_footer(text=f"Requested by {ctx.author.name}.", icon_url=ctx.author.avatar.url)
-
     # Check if the user has access to this command.
     if ctx.author.id in ctx.bot.user_whitelist:
         console.log(f"User {ctx.author.name} (ID: {ctx.author.id}) invoked the shutdown command.")
 
-        embed.title = "Shutting down..."
-        embed.set_image(url="https://cdn.discordapp.com/attachments/805603157484503046/1260199089686056971/yes-power.gif")
+        embed = create_embed(
+            ctx,
+            title="Shutting down...",
+            image_url="https://cdn.discordapp.com/attachments/805603157484503046/1260199089686056971/yes-power.gif"
+        )
         await ctx.send(embed=embed)
 
         await ctx.bot.close()
     else:
-        embed.title = "ACCESS DENIED"
-        embed.set_image(url="https://cdn.discordapp.com/attachments/764946979977297980/1261361149056778362/no-power.gif")
+        embed = create_embed(
+            ctx,
+            title="ACCESS DENIED",
+            image_url="https://cdn.discordapp.com/attachments/764946979977297980/1261361149056778362/no-power.gif"
+        )
         await ctx.send(embed=embed)
 
 
 # Toggle experimental features off and on.
 @commands.command(name="toggle_exp")
 async def _toggle_experimental(ctx):
-    embed = discord.Embed(
-        color=ctx.bot.color
-    )
-
-    embed.set_footer(text=f"Requested by {ctx.author.name}.", icon_url=ctx.author.avatar.url)
+    embed = create_embed(ctx)
 
     if ctx.author.id in ctx.bot.user_whitelist:
         ctx.bot.experimental = not ctx.bot.experimental
