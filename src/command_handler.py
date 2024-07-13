@@ -40,7 +40,13 @@ async def _fact(ctx):
 # For comedic effect, this command isn't documented anywhere.
 @commands.command(name="bitch")
 async def _bitch(ctx):
-    await ctx.send("https://media.discordapp.net/attachments/622200209015046220/831832692835221554/bitch.gif")
+    embed = create_embed(
+        ctx,
+        title=f"Latency: {int(ctx.bot.latency * 1000)}ms",
+        image_url="https://media.discordapp.net/attachments/622200209015046220/831832692835221554/bitch.gif"
+    )
+    
+    await ctx.send(embed=embed)
 
 
 # *** PRIVILEGED COMMANDS ***
