@@ -28,22 +28,18 @@ class Database():
         self._cursor.execute(query)
         self._conn.commit()
     
-
     def close(self):
         if self._conn:
             self._conn.close()
             console.log("Successfully closed the connection with the SQLite database.")
 
-
     def insert_pin(self, server_id, keyword, url):
         self._cursor.execute("INSERT INTO pins VALUES (?, ?, ?);", (server_id, keyword, url))
         self._conn.commit()
 
-
     def get_pins_by_server_id(self, server_id):
         self._cursor.execute("SELECT keyword, url FROM pins WHERE server_id = ?;", (server_id,))
         return self._cursor.fetchall()
-
 
     def get_pin_by_keyword(self, server_id, keyword):
         self._cursor.execute("SELECT keyword, url FROM pins WHERE server_id = ? AND name = ?;", (server_id, keyword))
