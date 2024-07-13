@@ -20,7 +20,7 @@ class Database():
         query = '''
         CREATE TABLE IF NOT EXISTS pins(
             server_id TEXT NOT NULL,
-            name TEXT NOT NULL,
+            keyword TEXT NOT NULL,
             url TEXT NOT NULL
         );
         '''
@@ -35,16 +35,16 @@ class Database():
             console.log("Successfully closed the connection with the SQLite database.")
 
 
-    def insert_pin(self, server_id, name, url):
-        self._cursor.execute("INSERT INTO pins VALUES (?, ?, ?);", (server_id, name, url))
+    def insert_pin(self, server_id, keyword, url):
+        self._cursor.execute("INSERT INTO pins VALUES (?, ?, ?);", (server_id, keyword, url))
         self._conn.commit()
 
 
     def get_pins_by_server_id(self, server_id):
-        self._cursor.execute("SELECT name, url FROM pins WHERE server_id = ?;", (server_id,))
+        self._cursor.execute("SELECT keyword, url FROM pins WHERE server_id = ?;", (server_id,))
         return self._cursor.fetchall()
 
 
-    def get_pin_by_name(self, server_id, name):
-        self._cursor.execute("SELECT name, url FROM pins WHERE server_id = ? AND name = ?;", (server_id, name))
+    def get_pin_by_keyword(self, server_id, keyword):
+        self._cursor.execute("SELECT keyword, url FROM pins WHERE server_id = ? AND name = ?;", (server_id, keyword))
         return self._cursor.fetchall()
