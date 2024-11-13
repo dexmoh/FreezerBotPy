@@ -3,6 +3,7 @@ from discord.ext import commands
 import command_handler as ch
 import console
 import whitelist
+from pins import PinsDB
 
 
 class FreezerBot(commands.Bot):
@@ -21,6 +22,9 @@ class FreezerBot(commands.Bot):
 
         # Flag we'll use to check whether the bot should use experimental features.
         self.experimental = True
+
+        # Object we'll use to handle interactions with the pins database.
+        self.pins = PinsDB(".data/pins.db")
 
         ch.register_commands(self)
     
