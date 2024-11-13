@@ -5,6 +5,7 @@ import console
 import discord.ext
 from embed import create_embed
 import re
+from difflib import SequenceMatcher
 
 
 # All of the command methods must be registered before the bot can use them.
@@ -57,6 +58,7 @@ async def _pin(ctx: discord.ext.commands.Context, *, keyword: str = None):
             embed = create_embed(
                 ctx,
                 desc="Uh oh, something went wrong. I couldn't fetch the message you were replying to.",
+                thumbnail_url=None,
                 set_footer=False
             )
             await ctx.send(embed=embed)
@@ -72,14 +74,16 @@ async def _pin(ctx: discord.ext.commands.Context, *, keyword: str = None):
         embed = create_embed(
             ctx,
             desc="The keyword can't be more than 50 characters long.",
+            thumbnail_url=None,
             set_footer=False
         )
+
         await ctx.send(embed=embed)
         return
 
     # Check if the keyword already exists.
     if ctx.bot.pins.get_pin_by_keyword(ctx.message.guild.id, keyword):
-        await ctx.send(embed=create_embed(ctx, desc="That keyword already exists.", set_footer=False))
+        await ctx.send(embed=create_embed(ctx, desc="That keyword already exists.", thumbnail_url=None, set_footer=False))
         return
     
     urls = ""
@@ -95,7 +99,7 @@ async def _pin(ctx: discord.ext.commands.Context, *, keyword: str = None):
             url_count += 1
     
     if url_count < 1:
-        await ctx.send(embed=create_embed(ctx, desc="The message has no attachments.", set_footer=False))
+        await ctx.send(embed=create_embed(ctx, desc="The message has no attachments.", thumbnail_url=None, set_footer=False))
         return
     
     ctx.bot.pins.add_pin(
@@ -111,7 +115,7 @@ async def _pin(ctx: discord.ext.commands.Context, *, keyword: str = None):
 
 
 # Search for a specific pin by keyword.
-@commands.command(name="search", aliases=["lookup", "get"])
+@commands.command(name="search", aliases=["lookup", "get", "show"])
 async def _search(ctx, *, keyword: str = None):
     if not keyword or keyword == "help":
         # Send help message that explains the search command.
@@ -127,7 +131,7 @@ async def _search(ctx, *, keyword: str = None):
     pin = ctx.bot.pins.get_pin_by_keyword(ctx.message.guild.id, keyword)
     if not pin:
         # TODO: Instead of just telling the user that there's no such keyword, implement some way to search for similar sounding pins.
-        embed = create_embed(ctx, desc="That keyword doesn't exist.", set_footer=False)
+        embed = create_embed(ctx, desc="That keyword doesn't exist.", thumbnail_url=None, set_footer=False)
         await ctx.send(embed=embed)
         return
     
@@ -135,20 +139,61 @@ async def _search(ctx, *, keyword: str = None):
     message_id = pin[0][1]
     urls = pin[0][2]
 
-    embed = create_embed(ctx, title=keyword, set_footer=False)
+    await ctx.send(embed=create_embed(ctx, desc=f"**{keyword}**", thumbnail_url=None, set_footer=False))
+    await ctx.send(urls)
 
     # If the channel and message IDs aren't null then we can create a link to the original message, quite fancy.
     if channel_id and message_id:
-        embed.url = f"https://discord.com/channels/{ctx.message.guild.id}/{channel_id}/{message_id}"
-    
-    await ctx.send(embed=embed)
-    await ctx.send(urls)
+        await ctx.send(f"-# Found the original message: https://discord.com/channels/{ctx.message.guild.id}/{channel_id}/{message_id}")
 
 
 # List all of the server pins. User can narrow down searches by entering a keyword.
-@commands.command(name="list")
+@commands.command(name="list", aliases=["pins"])
 async def _list(ctx: discord.ext.commands.Context, *, keyword: str = None):
-    pass
+    if keyword and keyword == "help":
+        # Send help message that explains the search command.
+        embed = create_embed(
+            ctx,
+            title="Usage: `poss list <search-term (optional)>`",
+            desc="List all of the pins, or narrow down the search by providing a search term."
+        )
+
+        await ctx.send(embed=embed)
+        return
+    
+    pins = ctx.bot.pins.get_pins_by_server_id(ctx.message.guild.id)
+    if not pins:
+        embed = create_embed(ctx, desc="There are no pins. Go ahead and pin something with the `pin` command!", thumbnail_url=None, set_footer=False)
+        await ctx.send(embed=embed)
+        return
+
+    # TODO: Implement a way to list through pins by reacting to the message.
+    if not keyword:
+        desc_str = "**Here's a list of all the pins!**"
+
+        for pin in pins:
+            desc_str += f"\n- {pin[2]}"
+
+        await ctx.send(embed=create_embed(ctx, desc=desc_str))
+        return
+    else:
+        # Search pins by keyword.
+        desc_str = f"**Pins that match '`{keyword}`':**"
+        counter = 0
+        for pin in pins:
+            pin_keyword = pin[2]
+            if keyword in pin_keyword:
+                desc_str += f"\n- {pin_keyword}"
+                counter += 1
+            elif SequenceMatcher(None, keyword, pin_keyword).ratio() >= 0.8:
+                desc_str += f"\n- {pin_keyword}"
+                counter += 1
+        
+        if counter == 0:
+            await ctx.send(embed=create_embed(ctx, desc=f"Haven't found any pins that match '`{keyword}`'.", thumbnail_url=None))
+            return
+
+        await ctx.send(embed=create_embed(ctx, desc=desc_str))
 
 
 # *** CHATBOT COMMANDS ***
@@ -157,12 +202,12 @@ async def _list(ctx: discord.ext.commands.Context, *, keyword: str = None):
 @commands.command(name="fact", aliases=["facts"])
 async def _fact(ctx):
     if ctx.message.guild.id not in ctx.bot.server_whitelist:
-        embed = create_embed(ctx, desc="This discord server doesn't have access to experimental features.")
+        embed = create_embed(ctx, desc="This discord server doesn't have access to experimental features.", thumbnail_url=None)
         await ctx.send(embed=embed)
         return
 
     if not ctx.bot.experimental:
-        embed = create_embed(ctx, desc="Experimental features are currently disabled.")
+        embed = create_embed(ctx, desc="Experimental features are currently disabled.", thumbnail_url=None)
         await ctx.send(embed=embed)
         return
 
