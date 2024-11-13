@@ -7,7 +7,7 @@ def create_embed(
         ctx: discord.ext.commands.Context,
         title: str = None,
         desc: str = None,
-        thumbnail_url: str = None,
+        thumbnail_url: str = "https://imgur.com/dRLQcoP.png",
         image_url: str = None,
         set_footer: bool = True
         ) -> discord.Embed:
@@ -17,12 +17,8 @@ def create_embed(
         description=desc
     )
 
-    # This check is probably not required (same for the image).
-    if thumbnail_url:
-        embed.set_thumbnail(url=thumbnail_url)
-
-    if image_url:
-        embed.set_image(url=image_url)
+    embed.set_thumbnail(url=thumbnail_url)
+    embed.set_image(url=image_url)
 
     if set_footer:
         embed.set_footer(text=f'Requested by {ctx.author.name}.', icon_url=ctx.author.avatar.url)

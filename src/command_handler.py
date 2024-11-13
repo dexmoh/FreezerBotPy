@@ -9,6 +9,9 @@ import re
 
 # All of the command methods must be registered before the bot can use them.
 def register_commands(bot: commands.Bot):
+    # We want to override the default help command.
+    bot.remove_command("help")
+
     # Pins.
     bot.add_command(_pin)
     bot.add_command(_search)
@@ -18,6 +21,8 @@ def register_commands(bot: commands.Bot):
     bot.add_command(_fact)
 
     # Utility.
+    bot.add_command(_help)
+    bot.add_command(_about)
     bot.add_command(_bitch)
 
     # Privileged.
@@ -25,7 +30,7 @@ def register_commands(bot: commands.Bot):
     bot.add_command(_toggle_experimental)
 
 
-# *** PINS ***
+# *** PIN COMMANDS ***
 
 # Create a new pin.
 @commands.command(name="pin")
@@ -35,8 +40,7 @@ async def _pin(ctx: discord.ext.commands.Context, *, keyword: str = None):
         embed = create_embed(
             ctx,
             title="Usage: `poss pin <keyword>`",
-            desc="Reply to a message with this command to pin its attachments, so you can later access them with the keyword you've chosen.\n\nUse `poss search <keyword>` to look up saved pins.\n\nKeywords can contain spaces, emoji and special symbols, they can't be longer than 50 characters.",
-            thumbnail_url="https://imgur.com/dRLQcoP.png"
+            desc="Reply to a message with this command to pin its attachments, so you can later access them with the keyword you've chosen.\n\nUse `poss search <keyword>` to look up saved pins.\n\nKeywords can contain spaces, emoji and special symbols, they can't be longer than 50 characters."
         )
 
         await ctx.send(embed=embed)
@@ -103,7 +107,7 @@ async def _pin(ctx: discord.ext.commands.Context, *, keyword: str = None):
         message_id=msg.id
     )
 
-    await ctx.send(embed=create_embed(ctx, title="Pinned!", desc=f"You can type `poss search {keyword}` to look up the pinned files.", thumbnail_url="https://imgur.com/dRLQcoP.png"))
+    await ctx.send(embed=create_embed(ctx, title="Pinned!", desc=f"You can type `poss search {keyword}` to look up the pinned files."))
 
 
 # Search for a specific pin by keyword.
@@ -114,8 +118,7 @@ async def _search(ctx, *, keyword: str = None):
         embed = create_embed(
             ctx,
             title="Usage: `poss search <keyword>`",
-            desc="Search for a saved pin by its keyword.",
-            thumbnail_url="https://imgur.com/dRLQcoP.png"
+            desc="Search for a saved pin by its keyword."
         )
 
         await ctx.send(embed=embed)
@@ -148,7 +151,7 @@ async def _list(ctx: discord.ext.commands.Context, *, keyword: str = None):
     pass
 
 
-# *** CHATBOT ***
+# *** CHATBOT COMMANDS ***
 
 # [EXPERIMENTAL] Generate a silly opossum fact.
 @commands.command(name="fact", aliases=["facts"])
@@ -166,13 +169,58 @@ async def _fact(ctx):
     embed = create_embed(
         ctx,
         title="COOL OPOSSUM FACT!",
-        desc="This is a placeholder, you shouldn't be seeing this. If you're seeing this please don't. Thank you!",
-        thumbnail_url="https://imgur.com/dRLQcoP.png"
+        desc="This is a placeholder, you shouldn't be seeing this. If you're seeing this please don't. Thank you!" # TODO: Change this lol.
     )
+
     await ctx.send(embed=embed)
 
 
-# *** UTILITY ***
+# *** UTILITY COMMANDS ***
+
+# Help command that lists all of the bot's commands.
+@commands.command(name="help", aliases=["commands", "info"])
+async def _help(ctx: discord.ext.commands.Context):
+
+    description_str = f'''
+    **Info**
+    Prefix your message with `{ctx.bot.command_prefix}` to access bot's commands.
+    Type `{ctx.bot.command_prefix}<command> help` to get more information about a specific command.
+
+    **Utility Commands**
+    `help` - Show this menu.
+    `about` - Show about page.
+
+    **Pin Commands**
+    `pin` - Create a new pin.
+    `search` - Search for a specific pin by keyword.
+    `list` - List all of the existing pins, or narrow them down by keyword.
+
+    **Chatbot Commands (Experimental)**
+    `fact` - Generate an opossum fact.
+    '''
+
+    # Show privileged commands only to privileged users.
+    if ctx.author.id in ctx.bot.user_whitelist:
+        description_str += f'''
+        **Privileged Commands**
+        `shutdown` - Turn {ctx.bot.name} off. :(
+        `toggle_exp` - Toggle experimental features off or on globally.
+        '''
+
+    embed = create_embed(
+        ctx,
+        title="Help menu!",
+        desc=description_str
+    )
+
+    await ctx.send(embed=embed)
+
+
+# Show bot's about page.
+@commands.command(name="about")
+async def _about(ctx):
+    pass
+
 
 # Chilly's version of the classic 'ping' command. :)
 # For comedic effect, this command isn't documented anywhere.
@@ -187,7 +235,7 @@ async def _bitch(ctx):
     await ctx.send(embed=embed)
 
 
-# *** PRIVILEGED ***
+# *** PRIVILEGED  COMMANDS ***
 
 # Shut down the bot (you'll have to manually turn it back on).
 @commands.command(name="shutdown")
