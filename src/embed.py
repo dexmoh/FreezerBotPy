@@ -1,7 +1,7 @@
 import discord
 import discord.ext.commands
 
-# A small function that creates a simple embed with most things we need.
+# A small function that creates a discord embed with most things we need.
 # Saves us from writing a few extra lines of code in the command handler.
 def create_embed(
         ctx: discord.ext.commands.Context,
@@ -10,7 +10,8 @@ def create_embed(
         thumbnail_url: str = "https://imgur.com/dRLQcoP.png",
         image_url: str = None,
         set_footer: bool = True
-        ) -> discord.Embed:
+    ) -> discord.Embed:
+    
     embed = discord.Embed(
         color=ctx.bot.color,
         title=title,

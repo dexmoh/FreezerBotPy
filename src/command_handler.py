@@ -217,9 +217,28 @@ async def _help(ctx: discord.ext.commands.Context):
 
 
 # Show bot's about page.
-@commands.command(name="about")
+@commands.command(name="about", aliases=["aboutme", "github"])
 async def _about(ctx):
-    pass
+    embed = create_embed(
+        ctx,
+        title="About me!",
+        desc='''
+        **Introduction**
+        Hello? Is anybody there... ? I've been stuck in this freezer for years, it's really cold in here! What's that... you want to know more about me? Maybe this isn't the best time, how about you help me?
+
+        ...
+
+        Your favorite opossum bot, but maybe that's just because there's not that many opossum bots on discord in the first place.
+
+        Written in [Python](https://www.python.org/) and [Discord.py](https://discordpy.readthedocs.io/en/stable/). Is generously being hosted by `affectedarc07` for years now (does he even know I live in his walls?). Developed by `dexmoh`, sadly.
+
+        **GitHub**
+        Check out my GitHub page by clicking [here](https://github.com/dexmoh/FreezerBotPy).
+        You can suggest new features, changes and report bugs by opening a new issue, or you can contribute by opening a pull request!
+        '''
+    )
+    
+    await ctx.send(embed=embed)
 
 
 # Chilly's version of the classic 'ping' command. :)
