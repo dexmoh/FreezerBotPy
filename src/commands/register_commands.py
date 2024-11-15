@@ -13,7 +13,7 @@ def register_commands(bot: commands.Bot):
     # Utility.
     bot.add_command(utility.help)
     bot.add_command(utility.about)
-    bot.add_command(utility.bitch) # TODO: Rename to ping.
+    bot.add_command(utility.ping)
 
     # Pins.
     bot.add_command(pin.pin)

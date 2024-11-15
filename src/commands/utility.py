@@ -73,11 +73,12 @@ async def about(ctx):
 
 # Chilly's version of the classic 'ping' command. :)
 # For comedic effect, this command isn't documented anywhere.
-@commands.command(name="bitch")
-async def bitch(ctx):
+@commands.command(name="ping", aliases=["bitch", "idiot"])
+async def ping(ctx):
     embed = create_embed(
         ctx,
         title=f"Latency: `{int(ctx.bot.latency * 1000)}ms`",
+        thumbnail_url=None,
         image_url="https://media.discordapp.net/attachments/622200209015046220/831832692835221554/bitch.gif"
     )
     
