@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import command_handler as ch
+from commands.register_commands import register_commands
 import console
 import whitelist
 from pins import PinsDB
@@ -26,7 +26,7 @@ class FreezerBot(commands.Bot):
         # Object we'll use to handle interactions with the pins database.
         self.pins = PinsDB(".data/pins.db")
 
-        ch.register_commands(self)
+        register_commands(self)
     
     # This method runs when the bot connects for the first time.
     async def on_ready(self):
