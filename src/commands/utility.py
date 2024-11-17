@@ -1,8 +1,10 @@
 import discord
-from discord.ext import commands
-import discord.ext.commands
 import discord.ext
+import discord.ext.commands
+from discord.ext import commands
+from consts import menu_desc
 from embed import create_embed
+from buttons.menu_switcher_view import MenuSwitcherView
 
 
 # *** UTILITY COMMANDS ***
@@ -10,40 +12,25 @@ from embed import create_embed
 # Help command that lists all of the bot's commands.
 @commands.command(name="help", aliases=["commands", "info"])
 async def help(ctx: discord.ext.commands.Context):
-
-    description_str = f'''
-    **Info**
-    Prefix your message with `{ctx.bot.command_prefix}` to access bot's commands.
-    Type `{ctx.bot.command_prefix}<command> help` to get more information about a specific command.
-
-    **Utility Commands**
-    `help` - Show this menu.
-    `about` - Show about page.
-
-    **Pin Commands**
-    `pin` - Create a new pin.
-    `search` - Search for a specific pin by keyword.
-    `list` - List all of the existing pins, or narrow them down by keyword.
-
-    **Chatbot Commands (Experimental)**
-    `fact` - Generate an opossum fact.
-    '''
-
-    # Show privileged commands only to privileged users.
-    if ctx.author.id in ctx.bot.user_whitelist:
-        description_str += f'''
-        **Privileged Commands**
-        `shutdown` - Turn {ctx.bot.name} off. :(
-        `toggle_exp` - Toggle experimental features off or on globally.
-        '''
-
     embed = create_embed(
         ctx,
         title="Help menu!",
-        desc=description_str
+        desc=menu_desc["help"].format(name=ctx.bot.name, prefix=ctx.bot.command_prefix)
     )
 
-    await ctx.send(embed=embed)
+    # Show privileged commands only to privileged users.
+    if ctx.author.id in ctx.bot.user_whitelist:
+        embed.description += menu_desc["help_privileged"].format(name=ctx.bot.name)
+
+    # Create a button.
+    view = MenuSwitcherView(ctx)
+    for child in view.children:
+        if isinstance(child, discord.ui.Button) and child.label == "Commands":
+            child.style = discord.ButtonStyle.gray
+            child.disabled = True
+            break
+
+    await ctx.send(embed=embed, view=view)
 
 
 # Show bot's about page.
@@ -52,23 +39,18 @@ async def about(ctx):
     embed = create_embed(
         ctx,
         title="About me!",
-        desc='''
-        **Introduction**
-        Hello? Is anybody there... ? I've been stuck in this freezer for years, it's really cold in here! What's that... you want to know more about me? Maybe this isn't the best time, how about you help me?
-
-        ...
-
-        Your favorite opossum bot, but maybe that's just because there's not that many opossum bots on discord in the first place.
-
-        Written in [Python](https://www.python.org/) and [Discord.py](https://discordpy.readthedocs.io/en/stable/). Is generously being hosted by `affectedarc07` for years now (does he even know I live in his walls?). Developed by `dexmoh`, sadly.
-
-        **GitHub**
-        Check out my GitHub page by clicking [here](https://github.com/dexmoh/FreezerBotPy).
-        You can suggest new features, changes and report bugs by opening a new issue, or you can contribute by opening a pull request!
-        '''
+        desc=menu_desc["about"]
     )
     
-    await ctx.send(embed=embed)
+    # Create a button.
+    view = MenuSwitcherView(ctx)
+    for child in view.children:
+        if isinstance(child, discord.ui.Button) and child.label == "About":
+            child.style = discord.ButtonStyle.gray
+            child.disabled = True
+            break
+
+    await ctx.send(embed=embed, view=view)
 
 
 # Chilly's version of the classic 'ping' command. :)
