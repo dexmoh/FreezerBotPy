@@ -1,8 +1,8 @@
+from discord.ext import commands
 from commands import utility
 from commands import pin
 from commands import chatbot
 from commands import privileged
-from discord.ext import commands
 
 
 # All of the command methods must be registered before the bot can use them.
@@ -13,6 +13,7 @@ def register_commands(bot: commands.Bot):
     # Utility.
     bot.add_command(utility.help)
     bot.add_command(utility.about)
+    bot.add_command(utility.roll)
     bot.add_command(utility.ping)
 
     # Pins.

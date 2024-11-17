@@ -1,3 +1,5 @@
+import re
+import random
 import discord
 import discord.ext
 import discord.ext.commands
@@ -51,6 +53,70 @@ async def about(ctx):
             break
 
     await ctx.send(embed=embed, view=view)
+
+
+# Roll a dice.
+# TODO: Implement a button that lets you reroll again, maybe?
+@commands.command(name="roll")
+async def roll(ctx, roll_str: str = ""):
+    input_match = re.fullmatch(r"(\d*)d(\d+)", roll_str)
+    if not input_match:
+        # Show help menu that explains the roll command.
+        embed = create_embed(
+            ctx,
+            title=f"Usage: `{ctx.bot.command_prefix}roll <XdY>`",
+            desc=f"Use `{ctx.bot.command_prefix}roll <XdY>` where X is the number of dice and Y is the number of the sides.\n\nExample: `{ctx.bot.command_prefix}roll 2d20`"
+        )
+
+        await ctx.send(embed=embed)
+        return
+
+    # Number of dice and sides we got from the command.
+    num_dice = int(input_match.group(1)) if input_match.group(1) else 1 # Default to 1 die if not specified.
+    num_sides = int(input_match.group(2))
+
+    if num_dice < 1 or num_dice > 100:
+        embed = create_embed(
+            ctx,
+            desc="You can't roll less than 1 die, or more than 100.",
+            thumbnail_url=None,
+            set_footer=False
+        )
+
+        await ctx.send(embed=embed)
+        return
+    
+    if num_sides < 2:
+        embed = create_embed(
+            ctx,
+            desc="Die can't have less than 2 sides.",
+            thumbnail_url=None,
+            set_footer=False
+        )
+
+        await ctx.send(embed=embed)
+        return
+    
+    if num_sides > 1000000000:
+        embed = create_embed(
+            ctx,
+            desc="Could you imagine if a die could have that many sides?",
+            thumbnail_url=None,
+            set_footer=False
+        )
+
+        await ctx.send(embed=embed)
+        return
+
+    rolls = [random.randint(1, num_sides) for _ in range(num_dice)]
+    
+    embed = create_embed(
+        ctx,
+        desc=f"**Rolling {roll_str}:**\n{rolls}\n\n(Total: {sum(rolls)})",
+        thumbnail_url=None
+    )
+
+    await ctx.send(embed=embed)
 
 
 # Chilly's version of the classic 'ping' command. :)

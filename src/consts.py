@@ -8,14 +8,15 @@ menu_desc: dict = {
         **Utility Commands**
         `help` - Show this menu.
         `about` - Show about page.
+        `roll <XdY>` - Roll a dice.
 
         **Pin Commands**
         `pin` - Create a new pin.
         `search` - Search for a specific pin by keyword.
         `list` - List all of the existing pins, or narrow them down by keyword.
 
-        **Chatbot Commands (Experimental)**
-        `fact` - Generate an opossum fact.
+        **Chatbot Commands**
+        `fact` - (Experimental) Generate an opossum fact.
         ''',
 
     "help_privileged" : '''
