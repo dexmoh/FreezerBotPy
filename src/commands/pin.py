@@ -16,8 +16,8 @@ async def pin(ctx: discord.ext.commands.Context, *, keyword: str = None):
         # Send help message that explains the pin command.
         embed = create_embed(
             ctx,
-            title="Usage: `poss pin <keyword>`",
-            desc="Reply to a message with this command to pin its attachments, so you can later access them with the keyword you've chosen.\n\nUse `poss search <keyword>` to look up saved pins.\n\nKeywords can contain spaces, emoji and special symbols, they can't be longer than 50 characters."
+            title=f"Usage: `{ctx.bot.command_prefix}pin <keyword>`",
+            desc=f"Reply to a message with this command to pin its attachments, so you can later access them with the keyword you've chosen.\n\nUse `{ctx.bot.command_prefix}search <keyword>` to look up saved pins.\n\nKeywords can contain spaces, emoji and special symbols, they can't be longer than 50 characters."
         )
 
         await ctx.send(embed=embed)
@@ -97,7 +97,7 @@ async def search(ctx, *, keyword: str = None):
         # Send help message that explains the search command.
         embed = create_embed(
             ctx,
-            title="Usage: `poss search <keyword>`",
+            title=f"Usage: `{ctx.bot.command_prefix}search <keyword>`",
             desc="Search for a saved pin by its keyword."
         )
 
@@ -130,7 +130,7 @@ async def list(ctx: discord.ext.commands.Context, *, keyword: str = None):
         # Send help message that explains the search command.
         embed = create_embed(
             ctx,
-            title="Usage: `poss list <search-term (optional)>`",
+            title=f"Usage: `{ctx.bot.command_prefix}list <search-term (optional)>`",
             desc="List all of the pins, or narrow down the search by providing a search term."
         )
 
