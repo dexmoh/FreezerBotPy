@@ -9,6 +9,7 @@ menu_desc: dict = {
         `help` - Show this menu.
         `about` - Show about page.
         `roll <XdY>` - Roll a dice.
+        `ping` - Check {name}'s latency.
 
         **Pin Commands**
         `pin` - Create a new pin.
