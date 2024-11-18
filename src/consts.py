@@ -13,8 +13,8 @@ menu_desc: dict = {
 
         **Pin Commands**
         `pin` - Create a new pin.
-        `search` - Search for a specific pin by keyword.
-        `list` - List all of the existing pins, or narrow them down by keyword.
+        `search <keyword>` - Search for a specific pin by keyword.
+        `list <search-term (optional)>` - List all of the existing pins, or narrow them down with a search term.
 
         **Chatbot Commands**
         `fact` - (Experimental) Generate an opossum fact.

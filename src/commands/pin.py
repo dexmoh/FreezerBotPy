@@ -1,10 +1,12 @@
 import discord
-from discord.ext import commands
-import discord.ext.commands
 import discord.ext
+import discord.ext.commands
+from discord.ext import commands
 from embed import create_embed
-import re
+from buttons.pins_search_view import PinsSearchView
 from difflib import SequenceMatcher
+import math
+import re
 
 
 # *** PIN COMMANDS ***
@@ -12,7 +14,7 @@ from difflib import SequenceMatcher
 # Create a new pin.
 @commands.command(name="pin")
 async def pin(ctx: discord.ext.commands.Context, *, keyword: str = None):
-    if not keyword or keyword == "help":
+    if not keyword or keyword.lower() == "help":
         # Send help message that explains the pin command.
         embed = create_embed(
             ctx,
@@ -125,48 +127,74 @@ async def search(ctx, *, keyword: str = None):
 
 # List all of the server pins. User can narrow down searches by entering a keyword.
 @commands.command(name="list", aliases=["pins"])
-async def list(ctx: discord.ext.commands.Context, *, keyword: str = None):
-    if keyword and keyword == "help":
+async def list(ctx: discord.ext.commands.Context, *, search_term: str = None):
+    if search_term:
+        search_term = search_term.lower()
+    
+    if search_term and search_term == "help":
         # Send help message that explains the search command.
-        embed = create_embed(
-            ctx,
-            title=f"Usage: `{ctx.bot.command_prefix}list <search-term (optional)>`",
-            desc="List all of the pins, or narrow down the search by providing a search term."
+        await ctx.send(embed=create_embed(
+                ctx,
+                title=f"Usage: `{ctx.bot.command_prefix}list <search-term (optional)>`",
+                desc="List all of the pins, or narrow down the search by providing a search term."
+            )
         )
-
-        await ctx.send(embed=embed)
         return
     
-    pins = ctx.bot.pins.get_pins_by_server_id(ctx.message.guild.id)
+    pins = ctx.bot.pins.get_keywords_by_server_id(ctx.message.guild.id)
     if not pins:
-        embed = create_embed(ctx, desc="There are no pins. Go ahead and pin something with the `pin` command!", thumbnail_url=None, set_footer=False)
-        await ctx.send(embed=embed)
+        await ctx.send(embed=create_embed(
+                ctx,
+                desc="There are no pins. Go ahead and pin something with the `pin` command!",
+                thumbnail_url=None,
+                set_footer=False
+            )
+        )
         return
+    
+    filtered_pins = []
+    title = "**Here's a list of all the pins!**"
 
-    # TODO: Implement a way to list through pins by reacting to the message.
-    if not keyword:
-        desc_str = "**Here's a list of all the pins!**"
-
+    if not search_term:
         for pin in pins:
-            desc_str += f"\n- {pin[2]}"
-
-        await ctx.send(embed=create_embed(ctx, desc=desc_str))
-        return
+            filtered_pins.append(pin[0])
     else:
         # Search pins by keyword.
-        desc_str = f"**Pins that match '`{keyword}`':**"
-        counter = 0
+        title = f"**Pins that match '`{search_term}`':**"
+
         for pin in pins:
-            pin_keyword = pin[2]
-            if keyword in pin_keyword:
-                desc_str += f"\n- {pin_keyword}"
-                counter += 1
-            elif SequenceMatcher(None, keyword, pin_keyword).ratio() >= 0.8:
-                desc_str += f"\n- {pin_keyword}"
-                counter += 1
+            pin_keyword = pin[0].lower()
+            if search_term in pin_keyword:
+                filtered_pins.append(pin[0])
+            elif SequenceMatcher(None, search_term, pin_keyword).ratio() >= 0.8:
+                filtered_pins.append(pin[0])
         
-        if counter == 0:
-            await ctx.send(embed=create_embed(ctx, desc=f"Haven't found any pins that match '`{keyword}`'.", thumbnail_url=None))
+        if not filtered_pins:
+            await ctx.send(embed=create_embed(
+                    ctx,
+                    desc=f"Haven't found any pins that match '`{search_term}`'.",
+                    thumbnail_url=None,
+                    set_footer=False
+                )
+            )
             return
 
-        await ctx.send(embed=create_embed(ctx, desc=desc_str))
+    pins_per_page_limit = 10
+    number_of_pages = math.ceil(len(filtered_pins) / pins_per_page_limit)
+    desc_str = title
+
+    # Show the first page of the pins.
+    for index, pin in enumerate(filtered_pins):
+        if index >= pins_per_page_limit:
+            break
+
+        desc_str += f"\n- {pin}"
+    
+    desc_str += f"\n\nPage 1/{number_of_pages}"
+
+    # Create buttons.
+    view = None
+    if number_of_pages > 1:
+        view = PinsSearchView(ctx, filtered_pins, 1, number_of_pages, pins_per_page_limit, title)
+
+    await ctx.send(embed=create_embed(ctx, desc=desc_str), view=view)

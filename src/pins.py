@@ -55,8 +55,14 @@ class PinsDB():
         self._cursor.execute("INSERT INTO pins VALUES (?, ?, ?, ?, ?, ?);", (server_id, channel_id, message_id, keyword, urls, url_count))
         self._conn.commit()
 
+    # Fetch a list of all of the pins from the server.
     def get_pins_by_server_id(self, server_id: int):
         self._cursor.execute("SELECT channel_id, message_id, keyword, urls, url_count FROM pins WHERE server_id = ?;", (server_id,))
+        return self._cursor.fetchall()
+    
+    # Fetch only the pin keywords from the server.
+    def get_keywords_by_server_id(self, server_id: int):
+        self._cursor.execute("SELECT keyword FROM pins WHERE server_id = ?;", (server_id,))
         return self._cursor.fetchall()
 
     def get_pin_by_keyword(self, server_id: int, keyword: str):
