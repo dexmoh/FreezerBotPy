@@ -18,6 +18,7 @@ def register_commands(bot: commands.Bot):
 
     # Pins.
     bot.add_command(pin.pin)
+    bot.add_command(pin.delete)
     bot.add_command(pin.search)
     bot.add_command(pin.list)
 

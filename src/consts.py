@@ -12,7 +12,8 @@ menu_desc: dict = {
         `ping` - Check {name}'s latency.
 
         **Pin Commands**
-        `pin` - Create a new pin.
+        `pin <keyword>` - Create a new pin.
+        `delete <keyword>` - Delete a pin.
         `search <keyword>` - Search for a specific pin by keyword.
         `list <search-term (optional)>` - List all of the existing pins, or narrow them down with a search term.
 

@@ -14,8 +14,8 @@ import re
 # Create a new pin.
 @commands.command(name="pin")
 async def pin(ctx: discord.ext.commands.Context, *, keyword: str = None):
+    # Send help message.
     if not keyword or keyword.lower() == "help":
-        # Send help message that explains the pin command.
         embed = create_embed(
             ctx,
             title=f"Usage: `{ctx.bot.command_prefix}pin <keyword>`",
@@ -92,18 +92,46 @@ async def pin(ctx: discord.ext.commands.Context, *, keyword: str = None):
     await ctx.send(embed=create_embed(ctx, title="Pinned!", desc=f"You can type `poss search {keyword}` to look up the pinned files."))
 
 
+# Delete a saved pin.
+@commands.command(name="delete", aliases=["unpin"])
+async def delete(ctx, *, keyword: str = None):
+    # Send help message.
+    if not keyword or keyword.lower() == "help":
+        await ctx.send(embed=create_embed(
+                ctx,
+                title=f"Usage: `{ctx.bot.command_prefix}delete <keyword>`",
+                desc="Delete a saved pin."
+            )
+        )
+        return
+    
+    # Check if the pin exists.
+    if not ctx.bot.pins.get_pin_by_keyword(ctx.message.guild.id, keyword):
+        await ctx.send(embed=create_embed(ctx, desc="That keyword doesn't exists.", thumbnail_url=None, set_footer=False))
+        return
+    
+    ctx.bot.pins.delete_pin(ctx.message.guild.id, keyword)
+
+    await ctx.send(embed=create_embed(
+            ctx,
+            desc=f"Successfully deleted '`{keyword}`'.",
+            thumbnail_url=None,
+            set_footer=False
+        )
+    )
+
+
 # Search for a specific pin by keyword.
 @commands.command(name="search", aliases=["lookup", "get", "show"])
 async def search(ctx, *, keyword: str = None):
-    if not keyword or keyword == "help":
-        # Send help message that explains the search command.
-        embed = create_embed(
-            ctx,
-            title=f"Usage: `{ctx.bot.command_prefix}search <keyword>`",
-            desc="Search for a saved pin by its keyword."
+    # Send help message.
+    if not keyword or keyword.lower() == "help":
+        await ctx.send(embed=create_embed(
+                ctx,
+                title=f"Usage: `{ctx.bot.command_prefix}search <keyword>`",
+                desc="Search for a saved pin by its keyword."
+            )
         )
-
-        await ctx.send(embed=embed)
         return
     
     pin = ctx.bot.pins.get_pin_by_keyword(ctx.message.guild.id, keyword)
@@ -131,8 +159,8 @@ async def list(ctx: discord.ext.commands.Context, *, search_term: str = None):
     if search_term:
         search_term = search_term.lower()
     
+    # Send help message.
     if search_term and search_term == "help":
-        # Send help message that explains the search command.
         await ctx.send(embed=create_embed(
                 ctx,
                 title=f"Usage: `{ctx.bot.command_prefix}list <search-term (optional)>`",
@@ -166,7 +194,7 @@ async def list(ctx: discord.ext.commands.Context, *, search_term: str = None):
             pin_keyword = pin[0].lower()
             if search_term in pin_keyword:
                 filtered_pins.append(pin[0])
-            elif SequenceMatcher(None, search_term, pin_keyword).ratio() >= 0.8:
+            elif SequenceMatcher(None, search_term, pin_keyword).ratio() >= 0.75:
                 filtered_pins.append(pin[0])
         
         if not filtered_pins:

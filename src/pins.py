@@ -43,6 +43,7 @@ class PinsDB():
             self._conn.close()
             console.log("Successfully closed the connection with the SQLite database.")
 
+    # Create a new pin.
     def add_pin(
             self,
             keyword: str,
@@ -53,6 +54,11 @@ class PinsDB():
             message_id: int = None
             ):
         self._cursor.execute("INSERT INTO pins VALUES (?, ?, ?, ?, ?, ?);", (server_id, channel_id, message_id, keyword, urls, url_count))
+        self._conn.commit()
+
+    # Delete a saved pin.
+    def delete_pin(self, server_id: int, keyword: str):
+        self._cursor.execute("DELETE FROM pins WHERE server_id = ? AND keyword= ?;", (server_id, keyword))
         self._conn.commit()
 
     # Fetch a list of all of the pins from the server.
