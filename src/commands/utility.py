@@ -120,19 +120,18 @@ async def roll(ctx, roll_str: str = ""):
 
 
 # The ping command, just don't be rude to the bot.
-@commands.command(name="ping", aliases=["bitch", "idiot"])
+@commands.command(name="ping")
 async def ping(ctx):
-    image_url=None
-
-    # A little tomfoolery.
-    if ctx.invoked_with != "ping":
-        image_url="https://media.discordapp.net/attachments/622200209015046220/831832692835221554/bitch.gif"
-
     await ctx.send(
         embed=create_embed(
             ctx,
             title=f"Latency: `{int(ctx.bot.latency * 1000)}ms`",
             thumbnail_url=None,
-            image_url=image_url
+            set_footer=False
         )
     )
+
+# Chilly's secret feature.
+@commands.command(name="bitch", aliases=["idiot"])
+async def insult(ctx):
+    await ctx.send("https://media.discordapp.net/attachments/622200209015046220/831832692835221554/bitch.gif")

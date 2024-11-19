@@ -15,7 +15,8 @@ async def shutdown(ctx):
         embed = create_embed(
             ctx,
             title="Shutting down...",
-            image_url="https://cdn.discordapp.com/attachments/805603157484503046/1260199089686056971/yes-power.gif"
+            image_url="https://cdn.discordapp.com/attachments/805603157484503046/1260199089686056971/yes-power.gif",
+            thumbnail_url=None
         )
         await ctx.send(embed=embed)
 
@@ -25,7 +26,8 @@ async def shutdown(ctx):
         embed = create_embed(
             ctx,
             title="ACCESS DENIED",
-            image_url="https://cdn.discordapp.com/attachments/764946979977297980/1261361149056778362/no-power.gif"
+            image_url="https://cdn.discordapp.com/attachments/764946979977297980/1261361149056778362/no-power.gif",
+            thumbnail_url=None
         )
         await ctx.send(embed=embed)
 

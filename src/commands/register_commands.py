@@ -15,6 +15,7 @@ def register_commands(bot: commands.Bot):
     bot.add_command(utility.about)
     bot.add_command(utility.roll)
     bot.add_command(utility.ping)
+    bot.add_command(utility.insult)
 
     # Pins.
     bot.add_command(pin.pin)
