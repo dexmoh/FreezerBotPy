@@ -23,7 +23,7 @@
 - Pins now get saved in an SQLite database, instead of... *text files* \*sigh.
 
 ## [EXPERIMENTAL] OpenAI Text Generation
-- The `poss facts` feature is now reworked to generate random, unhinged opossum facts using gpt-3.5. However, this feature is only available to the servers that have been whitelisted to use experimental features, otherwise, the old `poss facts` feature has been removed.
+- The `facts` command is now reworked to generate random, opossum facts using gpt-3.5. However, this feature is only available to the servers that have been whitelisted to use experimental features, otherwise, the old `poss facts` feature has been removed.
 
 ## Removals :(
 Some of the old bot features were removed either due to user disinterest, or because they weren't implemented well and had issues.
