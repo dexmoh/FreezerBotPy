@@ -1,6 +1,9 @@
 # Changelog
 > List of all of the changes from the old C# implementation of the bot.
 
+> [!IMPORTANT]
+> This changelog still isn't fully written and is still being updated as the bot gets new updates!
+
 ## General
 - The bot is now completely rewritten in Python.
 - Improved readability of user menus.
