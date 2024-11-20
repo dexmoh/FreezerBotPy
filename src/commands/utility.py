@@ -119,7 +119,8 @@ async def roll(ctx, roll_str: str = ""):
     await ctx.send(embed=embed)
 
 
-# The ping command, just don't be rude to the bot.
+# The ping command, show the current latency of the bot.
+# NOTE: I'm actually unsure how accurate this is.
 @commands.command(name="ping")
 async def ping(ctx):
     await ctx.send(
