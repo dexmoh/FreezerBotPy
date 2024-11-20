@@ -131,6 +131,7 @@ async def ping(ctx):
         )
     )
 
+
 # Chilly's secret feature.
 @commands.command(name="bitch", aliases=["idiot"])
 async def insult(ctx):
