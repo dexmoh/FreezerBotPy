@@ -15,11 +15,7 @@ def main():
         return
     
     discord_token_env = os.environ.get("FREEZER_BOT_DISCORD_TOKEN", "")
-    openai_api_key_env = os.environ.get("FREEZER_BOT_OPENAI_API_KEY", "")
 
-    if openai_api_key_env == '':
-        console.log("'FREEZER_BOT_OPENAI_API_KEY' isn't set in environment variables, the bot will only use legacy text generation.", console.Level.WARNING)
-    
     # Setup and run the bot.
     intents = discord.Intents.default()
     intents.message_content = True

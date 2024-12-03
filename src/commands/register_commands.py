@@ -1,7 +1,6 @@
 from discord.ext import commands
 from commands import utility
 from commands import pin
-from commands import chatbot
 from commands import privileged
 
 
@@ -22,9 +21,6 @@ def register_commands(bot: commands.Bot):
     bot.add_command(pin.delete)
     bot.add_command(pin.search)
     bot.add_command(pin.list)
-
-    # Chatbot.
-    bot.add_command(chatbot.fact)
 
     # Privileged.
     bot.add_command(privileged.shutdown)
