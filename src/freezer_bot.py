@@ -49,10 +49,17 @@ class FreezerBot(commands.Bot):
     
     # This method runs every time someone sends a message.
     async def on_message(self, message: discord.Message):
+        # Ignore bots.
+        if message.author.bot:
+            return await super().on_message(message)
+
         # Reply to bot mentions with a randomly generated line.
-        if self.user.mentioned_in(message) and not message.author.bot:
+        if self.user.mentioned_in(message):
             reply = self.chatbot.generate_line()
             if reply:
                 await message.channel.send(reply, reference=message, mention_author=False)
+        # Try to train the chatbot if the message is from a whitelisted server.
+        elif message.guild.id in self.whitelist["servers"]:
+            self.chatbot.learn(message.content)
         
         return await super().on_message(message)

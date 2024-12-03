@@ -1,6 +1,9 @@
 # Script for converting old chatbot training data text file into a JSON format.
 # Command usage: py chatbot_data_converter.py <old-data-filepath>
 
+# NOTE: The chatbot now uses a completely different format for generating Markov chains,
+# this tool is deprecated and the old chatbot data sadly can't be converted into a new format.
+
 import sys
 import json
 import re
