@@ -9,7 +9,7 @@ from embed import create_embed
 @commands.command(name="shutdown")
 async def shutdown(ctx):
     # Check if the user has access to this command.
-    if ctx.author.id in ctx.bot.user_whitelist:
+    if ctx.author.id in ctx.bot.whitelist["users"]:
         console.log(f"User {ctx.author.name} (ID: {ctx.author.id}) invoked the shutdown command.")
 
         embed = create_embed(

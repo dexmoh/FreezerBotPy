@@ -24,8 +24,7 @@ def main():
         prefix="poss ",
         name="Chilly",
         color=0x1ABC9C,
-        intents=intents,
-        user_whitelist_path=".data/user_whitelist.txt"
+        intents=intents
     )
 
     bot.run(token=discord_token_env) # (blocking call)

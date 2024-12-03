@@ -19,7 +19,7 @@ class MenuSwitcherView(discord.ui.View):
         )
 
         # Show privileged commands only to privileged users.
-        if self.ctx.author.id in self.ctx.bot.user_whitelist:
+        if self.ctx.author.id in self.ctx.bot.whitelist["users"]:
             embed.description += menu_desc["help_privileged"].format(name=self.ctx.bot.name)
         
         # Create a button.

@@ -4,38 +4,36 @@ from commands.register_commands import register_commands
 import console
 from pins import PinsDB
 from chatbot import ChatBot
+import json
 
 
 class FreezerBot(commands.Bot):
-    def __init__(self, prefix, name, color, intents, user_whitelist_path, *args, **kwargs):
+    def __init__(self, prefix, name, color, intents, *args, **kwargs):
         super().__init__(command_prefix=prefix, intents=intents, *args, **kwargs)
 
         # Our bot's name and color (used in embeds).
         self.name = name
         self.color = color
 
-        # List of user IDs that can use privileged commands.
-        self.user_whitelist = []
+        # Dictionary containing lists of user and server IDs.
+        # Users on this list can use privileged commands.
+        # Servers on this list will included in chatbot training.
+        self.whitelist: dict[str, list[int]] = {}
         try:
-            with open(user_whitelist_path, "r", encoding="utf-8") as file:
-                for line in file:
-                    line = line.split("#")[0].strip()
-
-                    if line:
-                        try:
-                            id = int(line)
-                            self.user_whitelist.append(id)
-                        except ValueError:
-                            console.log(f"Couldn't convert one of the IDs in '{user_whitelist_path}' file into a number. All of the IDs must be numbers.", console.Level.ERROR)
-        except FileNotFoundError:
-            console.log(f"The '{user_whitelist_path}' file doesn't exist. The user whitelist will be empty.", console.Level.WARNING)
-            self.user_whitelist = []
+            with open(".data/whitelist.json", "r") as json_file:
+                self.whitelist = json.load(json_file)
+        except Exception:
+            console.log(f"The '.data/whitelist.json' file doesn't exist, or it isn't formatted correctly. The user and server whitelists will be empty.", console.Level.WARNING)
+            self.whitelist = {
+                "servers": [],
+                "users": []
+            }
 
         # Object we'll use to handle interactions with the pins database.
         self.pins = PinsDB(".data/pins.db")
 
         # Markov chain text generation.
-        self.chatbot = ChatBot(".data/chatbot_data.json")
+        self.chatbot = ChatBot()
 
         register_commands(self)
     

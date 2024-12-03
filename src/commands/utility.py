@@ -21,7 +21,7 @@ async def help(ctx: discord.ext.commands.Context):
     )
 
     # Show privileged commands only to privileged users.
-    if ctx.author.id in ctx.bot.user_whitelist:
+    if ctx.author.id in ctx.bot.whitelist["users"]:
         embed.description += menu_desc["help_privileged"].format(name=ctx.bot.name)
 
     # Create a button.
