@@ -4,6 +4,7 @@ from commands.register_commands import register_commands
 import console
 from pins import PinsDB
 from chatbot import ChatBot
+import random
 import json
 
 
@@ -49,6 +50,12 @@ class FreezerBot(commands.Bot):
     
     # This method runs every time someone sends a message.
     async def on_message(self, message: discord.Message):
+        # There is 1 in 1000 chance for the bot to say something at random.
+        if random.randint(1, 1000) == 1:
+            reply = self.chatbot.generate_line()
+            if reply:
+                await message.channel.send(reply)
+
         # Ignore bots.
         if message.author.bot:
             return await super().on_message(message)
@@ -56,8 +63,9 @@ class FreezerBot(commands.Bot):
         # Reply to bot mentions with a randomly generated line.
         if self.user.mentioned_in(message):
             reply = self.chatbot.generate_line()
-            if reply:
-                await message.channel.send(reply, reference=message, mention_author=False)
+            if not reply:
+                reply = "hi!"
+            await message.channel.send(reply, reference=message, mention_author=False)
         # Try to train the chatbot if the message is from a whitelisted server.
         elif message.guild.id in self.whitelist["servers"]:
             self.chatbot.learn(message.content)

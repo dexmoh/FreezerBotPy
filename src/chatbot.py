@@ -44,7 +44,7 @@ class ChatBot():
             message_token_len += 1
 
             # Check if we hit the character limit.
-            if len(message) >= self.max_char_len:
+            if len(message) > self.max_char_len:
                 # Cut down the string to fit the limit.
                 message = message[:self.max_char_len]
                 break
