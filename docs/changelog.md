@@ -23,6 +23,11 @@
 - Users can now list through saved pins by reacting to the bot's message.
 - Pins now get saved in an SQLite database, instead of... *text files* \*sigh.
 
+## Chatbot
+- The bot now has a lower chance to reply to random messages (0.1% per message).
+- The chatbot can now learn from new messages, but its only learning from the servers that have been whitelisted in the configuration.
+- The generated messages are now more random, but a bit less coherent.
+
 ## Removals :(
 Some of the old bot features were removed either due to user disinterest, or because they weren't implemented well and had issues.
 
