@@ -24,4 +24,3 @@ def register_commands(bot: commands.Bot):
 
     # Privileged.
     bot.add_command(privileged.shutdown)
-    bot.add_command(privileged.toggle_experimental)

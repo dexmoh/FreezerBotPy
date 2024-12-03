@@ -2,13 +2,12 @@ import discord
 from discord.ext import commands
 from commands.register_commands import register_commands
 import console
-import whitelist
 from pins import PinsDB
 from chatbot import ChatBot
 
 
 class FreezerBot(commands.Bot):
-    def __init__(self, prefix, name, color, intents, user_whitelist_path, server_whitelist_path, *args, **kwargs):
+    def __init__(self, prefix, name, color, intents, user_whitelist_path, *args, **kwargs):
         super().__init__(command_prefix=prefix, intents=intents, *args, **kwargs)
 
         # Our bot's name and color (used in embeds).
@@ -16,13 +15,21 @@ class FreezerBot(commands.Bot):
         self.color = color
 
         # List of user IDs that can use privileged commands.
-        self.user_whitelist = whitelist.read_wl_file(user_whitelist_path)
+        self.user_whitelist = []
+        try:
+            with open(user_whitelist_path, "r", encoding="utf-8") as file:
+                for line in file:
+                    line = line.split("#")[0].strip()
 
-        # List of server IDs that can access bot's experimental features.
-        self.server_whitelist = whitelist.read_wl_file(server_whitelist_path)
-
-        # Flag we'll use to check whether the bot should use experimental features.
-        self.experimental = True
+                    if line:
+                        try:
+                            id = int(line)
+                            self.user_whitelist.append(id)
+                        except ValueError:
+                            console.log(f"Couldn't convert one of the IDs in '{user_whitelist_path}' file into a number. All of the IDs must be numbers.", console.Level.ERROR)
+        except FileNotFoundError:
+            console.log(f"The '{user_whitelist_path}' file doesn't exist. The user whitelist will be empty.", console.Level.WARNING)
+            self.user_whitelist = []
 
         # Object we'll use to handle interactions with the pins database.
         self.pins = PinsDB(".data/pins.db")

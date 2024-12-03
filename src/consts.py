@@ -21,7 +21,6 @@ menu_desc: dict = {
     "help_privileged" : '''
         **Privileged Commands**
         `shutdown` - Turn {name} off. :(
-        `toggle_exp` - Toggle experimental features off or on globally.
         ''',
 
     "about" : '''

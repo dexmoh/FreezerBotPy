@@ -30,24 +30,3 @@ async def shutdown(ctx):
             thumbnail_url=None
         )
         await ctx.send(embed=embed)
-
-
-# Toggle experimental features off and on.
-@commands.command(name="toggle_exp")
-async def toggle_experimental(ctx):
-    embed = create_embed(ctx)
-
-    if ctx.author.id in ctx.bot.user_whitelist:
-        ctx.bot.experimental = not ctx.bot.experimental
-
-        if ctx.bot.experimental:
-            console.log(f"User {ctx.author.name} (ID: {ctx.author.id}) enabled experimental features.")
-            embed.description = "Experimental features are now **enabled**."
-        else:
-            console.log(f"User {ctx.author.name} (ID: {ctx.author.id}) disabled experimental features.")
-            embed.description = "Experimental features are now **disabled**."
-
-        await ctx.send(embed=embed)
-    else:
-        embed.description = "You don't have access to this command."
-        await ctx.send(embed=embed)

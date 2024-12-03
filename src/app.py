@@ -25,8 +25,7 @@ def main():
         name="Chilly",
         color=0x1ABC9C,
         intents=intents,
-        user_whitelist_path=".data/user_whitelist.txt",
-        server_whitelist_path=".data/server_whitelist.txt"
+        user_whitelist_path=".data/user_whitelist.txt"
     )
 
     bot.run(token=discord_token_env) # (blocking call)
