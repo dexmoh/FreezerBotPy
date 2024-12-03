@@ -16,6 +16,7 @@ menu_desc: dict = {
         `delete <keyword>` - Delete a pin.
         `search <keyword>` - Search for a specific pin by keyword.
         `list <search-term (optional)>` - List all of the existing pins, or narrow them down with a search term.
+        `random` - Send a random pin.
         ''',
 
     "help_privileged" : '''

@@ -5,6 +5,7 @@ from discord.ext import commands
 from embed import create_embed
 from buttons.pins_search_view import PinsSearchView
 from difflib import SequenceMatcher
+import random
 import math
 import re
 
@@ -226,3 +227,33 @@ async def list(ctx: discord.ext.commands.Context, *, search_term: str = None):
         view = PinsSearchView(ctx, filtered_pins, 1, number_of_pages, pins_per_page_limit, title)
 
     await ctx.send(embed=create_embed(ctx, desc=desc_str), view=view)
+
+
+# Send a random pin from the server.
+@commands.command(name="random")
+async def random_pin(ctx: discord.ext.commands.Context):
+    pins = ctx.bot.pins.get_pins_by_server_id(ctx.message.guild.id)
+
+    if not pins:
+        await ctx.send(embed=create_embed(
+                ctx,
+                desc="There are no pins. Go ahead and pin something with the `pin` command!",
+                thumbnail_url=None,
+                set_footer=False
+            )
+        )
+        return
+
+    pin = random.choice(pins)
+
+    channel_id = pin[0]
+    message_id = pin[1]
+    keyword = pin[2]
+    urls = pin[3]
+
+    await ctx.send(embed=create_embed(ctx, desc=f"**{keyword}**", thumbnail_url=None, set_footer=False))
+    await ctx.send(urls)
+
+    # If the channel and message IDs aren't null then we can create a link to the original message, quite fancy.
+    if channel_id and message_id:
+        await ctx.send(f"-# Found the original message: https://discord.com/channels/{ctx.message.guild.id}/{channel_id}/{message_id}")

@@ -16,6 +16,7 @@
 ## New Commands
 - New `roll` command that lets you roll dice.
 - New `ping` command that lets you check latency.
+- New `random` command that shows you a random pin.
 
 ## Pins
 - The `loopkup` command got renamed to `show`, but you can still use the old alias to access the command.

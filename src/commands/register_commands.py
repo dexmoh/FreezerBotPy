@@ -21,6 +21,7 @@ def register_commands(bot: commands.Bot):
     bot.add_command(pin.delete)
     bot.add_command(pin.search)
     bot.add_command(pin.list)
+    bot.add_command(pin.random_pin)
 
     # Privileged.
     bot.add_command(privileged.shutdown)
