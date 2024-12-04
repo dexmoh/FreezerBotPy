@@ -1,3 +1,4 @@
+import re
 import json
 import random
 import console
@@ -6,7 +7,7 @@ import console
 # Class responsible for generating text using Markov chains.
 # The chatbot can learn words from new messages and use them in future generation.
 class ChatBot():
-    def __init__(self, token_limit_per_line: int = 300):
+    def __init__(self):
         self.data: dict[str, dict[str, int]] = {}
         self.data_filepath: str = ".data/chatbot/dataset.json"
         self.word_blacklist: list[str] = []
@@ -62,10 +63,11 @@ class ChatBot():
     def learn(self, sentence: str):
         tokens = []
         for token in sentence.split():
-            if token.startswith("http://") or token.startswith("https://"):
+            if token.startswith("http") or re.search(r"<:.+:\d+>", token):
                 tokens.append(token)
+                continue
 
-            # Set every token except URLs to lowercase.
+            # Set every token except URLs and emoji to lowercase.
             tokens.append(token.lower())
 
             # If the message contains a blacklisted word, we don't want to train on it.
