@@ -1,3 +1,4 @@
 .venv
 .data
+.old_data
 __pycache__
