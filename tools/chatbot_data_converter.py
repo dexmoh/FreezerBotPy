@@ -2,17 +2,17 @@
 # Command usage: py chatbot_data_converter.py <old-data-filepath>
 
 # NOTE: The chatbot now uses a completely different format for generating Markov chains,
-# this tool is deprecated and the old chatbot data sadly can't be converted into a new format.
+# this tool is deprecated and the old chatbot data can't be converted into a new format.
 
 import sys
 import json
 import re
 
 
-def main() -> int:
+def main():
     if len(sys.argv) != 2 or sys.argv[1].lower() == "help":
         print("Usage: py chatbot_data_converter.py <old-data-filepath>")
-        return -1
+        return
     
     parsed_data = {}
 
@@ -41,7 +41,7 @@ def main() -> int:
         json.dump(parsed_data, f)
     
     print(f"Successfully saved {len(parsed_data)} entries.")
-    return 0
+    return
 
 
 if __name__ == "__main__":

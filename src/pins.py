@@ -41,6 +41,7 @@ class PinsDB():
     def close(self):
         if self._conn:
             self._conn.close()
+            self._conn = None
             console.log("Successfully closed the connection with the SQLite database.")
 
     # Create a new pin.
