@@ -25,3 +25,5 @@ The code is released under the MIT License. See [LICENSE](/LICENSE).
 Bot invite links are no longer public, but Chilly won't leave any servers it's already been part of.
 
 Check out [Installation](#installation) if you want to host your own instance of FreezerBot.
+
+![WEH](https://imgur.com/dRLQcoP.png)
