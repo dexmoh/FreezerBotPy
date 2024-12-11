@@ -9,7 +9,7 @@ def main():
     # Configure logging.
     console.init()
 
-    # Fetch env variables.
+    # Fetch discord token.
     if "FREEZER_BOT_DISCORD_TOKEN" not in os.environ:
         console.log("Couldn't find bot's Discord token, make sure the 'FREEZER_BOT_DISCORD_TOKEN' environment variable is set.", console.Level.CRITICAL)
         return
@@ -21,7 +21,7 @@ def main():
     intents.message_content = True
 
     bot = freezer_bot.FreezerBot(
-        prefix="poss ",
+        prefix=["poss ", "Poss "],
         name="Chilly",
         color=0x1ABC9C,
         intents=intents
