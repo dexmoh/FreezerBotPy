@@ -17,7 +17,7 @@ async def help(ctx: discord.ext.commands.Context):
     embed = create_embed(
         ctx,
         title="Help menu!",
-        desc=menu_desc["help"].format(name=ctx.bot.name, prefix=ctx.bot.command_prefix)
+        desc=menu_desc["help"].format(name=ctx.bot.name, prefix=ctx.bot.command_prefix[0])
     )
 
     # Show privileged commands only to privileged users.
@@ -64,8 +64,8 @@ async def roll(ctx, roll_str: str = ""):
         # Show help menu that explains the roll command.
         embed = create_embed(
             ctx,
-            title=f"Usage: `{ctx.bot.command_prefix}roll <XdY>`",
-            desc=f"Use `{ctx.bot.command_prefix}roll <XdY>` where X is the number of dice and Y is the number of the sides.\n\nExample: `{ctx.bot.command_prefix}roll 2d20`"
+            title=f"Usage: `{ctx.bot.command_prefix[0]}roll <XdY>`",
+            desc=f"Use `{ctx.bot.command_prefix[0]}roll <XdY>` where X is the number of dice and Y is the number of the sides.\n\nExample: `{ctx.bot.command_prefix[0]}roll 2d20`"
         )
 
         await ctx.send(embed=embed)

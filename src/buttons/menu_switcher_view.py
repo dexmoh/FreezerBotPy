@@ -15,7 +15,7 @@ class MenuSwitcherView(discord.ui.View):
         embed = create_embed(
             self.ctx,
             title="Help menu!",
-            desc=menu_desc["help"].format(name=self.ctx.bot.name, prefix=self.ctx.bot.command_prefix)
+            desc=menu_desc["help"].format(name=self.ctx.bot.name, prefix=self.ctx.bot.command_prefix[0])
         )
 
         # Show privileged commands only to privileged users.

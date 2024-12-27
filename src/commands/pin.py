@@ -19,8 +19,8 @@ async def pin(ctx: discord.ext.commands.Context, *, keyword: str = None):
     if not keyword or keyword.lower() == "help":
         embed = create_embed(
             ctx,
-            title=f"Usage: `{ctx.bot.command_prefix}pin <keyword>`",
-            desc=f"Reply to a message with this command to pin its attachments, so you can later access them with the keyword you've chosen.\n\nUse `{ctx.bot.command_prefix}search <keyword>` to look up saved pins.\n\nKeywords can contain spaces, emoji and special symbols, they can't be longer than 50 characters."
+            title=f"Usage: `{ctx.bot.command_prefix[0]}pin <keyword>`",
+            desc=f"Reply to a message with this command to pin its attachments, so you can later access them with the keyword you've chosen.\n\nUse `{ctx.bot.command_prefix[0]}search <keyword>` to look up saved pins.\n\nKeywords can contain spaces, emoji and special symbols, they can't be longer than 50 characters."
         )
 
         await ctx.send(embed=embed)
@@ -100,7 +100,7 @@ async def delete(ctx, *, keyword: str = None):
     if not keyword or keyword.lower() == "help":
         await ctx.send(embed=create_embed(
                 ctx,
-                title=f"Usage: `{ctx.bot.command_prefix}delete <keyword>`",
+                title=f"Usage: `{ctx.bot.command_prefix[0]}delete <keyword>`",
                 desc="Delete a saved pin."
             )
         )
@@ -129,7 +129,7 @@ async def search(ctx, *, keyword: str = None):
     if not keyword or keyword.lower() == "help":
         await ctx.send(embed=create_embed(
                 ctx,
-                title=f"Usage: `{ctx.bot.command_prefix}search <keyword>`",
+                title=f"Usage: `{ctx.bot.command_prefix[0]}search <keyword>`",
                 desc="Search for a saved pin by its keyword."
             )
         )
@@ -164,7 +164,7 @@ async def list(ctx: discord.ext.commands.Context, *, search_term: str = None):
     if search_term and search_term == "help":
         await ctx.send(embed=create_embed(
                 ctx,
-                title=f"Usage: `{ctx.bot.command_prefix}list <search-term (optional)>`",
+                title=f"Usage: `{ctx.bot.command_prefix[0]}list <search-term (optional)>`",
                 desc="List all of the pins, or narrow down the search by providing a search term."
             )
         )
