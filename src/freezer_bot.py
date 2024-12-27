@@ -50,8 +50,8 @@ class FreezerBot(commands.Bot):
     
     # This method runs every time someone sends a message.
     async def on_message(self, message: discord.Message):
-        # There is 1 in 1000 chance for the bot to say something at random.
-        if random.randint(1, 1000) == 1:
+        # There is 1 in 600 chance for the bot to say something at random.
+        if random.randint(1, 600) == 1:
             reply = self.chatbot.generate_line()
             if reply:
                 await message.channel.send(reply)
